@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Anselmo Jose Munoz Medina on 1/13/20 11:57 PM
+  ~ Email: Joseanmun@gmail.com
+  ~ Copyright (c) 2020. All rights reserved.
+  ~ Last modified 1/13/20 11:45 PM
+  ~
+  -->
+
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
