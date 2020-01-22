@@ -35,7 +35,7 @@ class DataModule {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
-            .baseUrl("http://api.openweathermap.org/data/2.5/")
+            .baseUrl("https://api-dev.alpify.com:3005/mobiletest/")
             .build()
     }
 

@@ -8,9 +8,14 @@
 
 package com.example.mapapp.injection.modules
 
+import com.example.mapapp.MapsActivity
+import com.example.mapapp.presentation.MapView
 import dagger.Module
+import dagger.Provides
 
 @Module
 class MapActivityModule {
 
+    @Provides
+    internal fun provideMapsActivity(mapsActivity: MapsActivity): MapView = mapsActivity
 }

@@ -8,16 +8,33 @@
 
 package com.example.mapapp
 
+import android.annotation.SuppressLint
+import android.location.Location
 import android.os.Bundle
+import android.widget.Toast
 import com.example.mapapp.base.BaseActivity
+import com.example.mapapp.model.UserModel
+import com.example.mapapp.presentation.MapPresenter
+import com.example.mapapp.presentation.MapView
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import javax.inject.Inject
 
-class MapsActivity : BaseActivity(), OnMapReadyCallback {
+class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView {
+
+    @Inject
+    lateinit var presenter: MapPresenter
+
+    private var longitude: Double = 41.387154
+    private var latitude: Double = 2.167180
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var mMap: GoogleMap
 
@@ -45,12 +62,34 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         val sydney = LatLng(-34.0, 151.0)
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
     }
 
     override var layout = R.layout.activity_maps;
 
 
     override fun onViewLoaded() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        showLoader()
+        getCurrentLocation()
+    }
+
+    override fun renderCurrentUsers(userList: List<UserModel>) {
+        hideLoader()
+        userList.forEach { Toast.makeText(this, it.name, Toast.LENGTH_SHORT).show(); }
+    }
+
+    override fun showError() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getCurrentLocation() {
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                longitude = location?.longitude!!
+                latitude = location?.latitude
+                presenter.execute(latitude, longitude)
+            }
     }
 }
