@@ -11,7 +11,6 @@ package com.example.mapapp
 import android.annotation.SuppressLint
 import android.location.Location
 import android.os.Bundle
-import android.widget.Toast
 import com.example.mapapp.base.BaseActivity
 import com.example.mapapp.model.UserModel
 import com.example.mapapp.presentation.MapPresenter
@@ -25,6 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import javax.inject.Inject
+
 
 class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView {
 
@@ -57,12 +57,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-
     }
 
     override var layout = R.layout.activity_maps;
@@ -76,7 +70,15 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView {
 
     override fun renderCurrentUsers(userList: List<UserModel>) {
         hideLoader()
-        userList.forEach { Toast.makeText(this, it.name, Toast.LENGTH_SHORT).show(); }
+        userList.forEach {
+            // Add a marker in Sydney and move the camera
+            val poi = LatLng(it.latitude, it.longitude)
+            mMap.addMarker(
+                MarkerOptions()
+                    .position(poi)
+                    .title(it.name)
+            )
+        }
     }
 
     override fun showError() {
@@ -90,6 +92,9 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView {
                 longitude = location?.longitude!!
                 latitude = location?.latitude
                 presenter.execute(latitude, longitude)
+                val currentPosition = LatLng(latitude, longitude)
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(currentPosition))
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(17.0f))
             }
     }
 }
