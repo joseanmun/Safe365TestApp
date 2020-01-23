@@ -12,5 +12,6 @@ import com.example.mapapp.model.UserModel
 
 interface MapView {
     fun renderCurrentUsers(userList: List<UserModel>)
+    fun renderCurrentUsersOnList(userList: List<UserModel>)
     fun showError()
 }

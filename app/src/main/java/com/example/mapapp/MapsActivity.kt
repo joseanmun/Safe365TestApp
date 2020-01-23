@@ -14,6 +14,7 @@ import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.mapapp.base.BaseActivity
@@ -32,10 +33,12 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
+import kotlinx.android.synthetic.main.activity_maps.*
 import javax.inject.Inject
 
 
-class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView {
+class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView,
+    AdapterView.OnItemSelectedListener {
 
     @Inject
     lateinit var presenter: MapPresenter
@@ -53,6 +56,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        spinner!!.setOnItemSelectedListener(this)
     }
 
     /**
@@ -82,6 +86,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView {
     var list: ArrayList<Target> = arrayListOf()
 
     override fun renderCurrentUsers(userList: List<UserModel>) {
+        mMap.clear()
         hideLoader()
         list = arrayListOf()
         userList.forEach {
@@ -116,8 +121,13 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView {
         }
     }
 
+    override fun renderCurrentUsersOnList(userList: List<UserModel>) {
+        var spinnerAdapter = CustomeSpinnerAdapter(this, userList)
+        spinner?.adapter = spinnerAdapter
+        spinner!!.setAdapter(spinnerAdapter)
+    }
+
     override fun showError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     @SuppressLint("MissingPermission")
@@ -168,4 +178,9 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView {
         }
     }
 
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+    }
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+    }
 }
