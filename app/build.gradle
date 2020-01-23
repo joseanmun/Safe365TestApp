@@ -56,6 +56,7 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation "com.squareup.picasso:picasso:$picasso_version"
+    implementation 'com.github.marlonlom:timeago:3.0.1'
 
 
     implementation project(':domain')

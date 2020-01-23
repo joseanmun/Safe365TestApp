@@ -16,13 +16,17 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.mapapp.model.UserModel
+import com.github.marlonlom.utilities.timeago.TimeAgo
+import com.github.marlonlom.utilities.timeago.TimeAgoMessages
 import com.squareup.picasso.Picasso
+import java.util.*
 
 
 class CustomeSpinnerAdapter(val context: Context, var userList: List<UserModel>) : BaseAdapter() {
 
 
     val mInflater: LayoutInflater = LayoutInflater.from(context)
+    val messages = TimeAgoMessages.Builder().withLocale(Locale.ENGLISH).build();
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View
@@ -45,7 +49,7 @@ class CustomeSpinnerAdapter(val context: Context, var userList: List<UserModel>)
         vh.titleTextView.text = userModel.name
         vh.latTextView.text = userModel.latitude.toString()
         vh.lngTextView.text = userModel.longitude.toString()
-        vh.activeTextView.text = userModel.timestamp.toString()
+        vh.activeTextView.text = TimeAgo.using(userModel.timestamp.time, messages)
         vh.motionTextView.text = userModel.motion
         Picasso.get()
             .load(userModel.avatar)

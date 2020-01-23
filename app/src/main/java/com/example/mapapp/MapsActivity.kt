@@ -21,6 +21,8 @@ import com.example.mapapp.base.BaseActivity
 import com.example.mapapp.model.UserModel
 import com.example.mapapp.presentation.MapPresenter
 import com.example.mapapp.presentation.MapView
+import com.github.marlonlom.utilities.timeago.TimeAgo
+import com.github.marlonlom.utilities.timeago.TimeAgoMessages
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -34,6 +36,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.activity_maps.*
+import java.util.*
 import javax.inject.Inject
 
 
@@ -49,6 +52,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView,
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var mMap: GoogleMap
+    private lateinit var messages: TimeAgoMessages
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +61,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView,
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         spinner!!.setOnItemSelectedListener(this)
+        messages = TimeAgoMessages.Builder().withLocale(Locale.ENGLISH).build();
     }
 
     /**
@@ -171,7 +176,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView,
             titleTextView.text = userModel?.name
             latTextView.text = userModel?.latitude.toString()
             lngTextView.text = userModel?.longitude.toString()
-            activeTextView.text = userModel?.timestamp.toString()
+            activeTextView.text = TimeAgo.using(userModel!!.timestamp!!.time, messages);
             motionTextView.text = userModel?.motion
 
 
