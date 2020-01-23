@@ -1,12 +1,12 @@
 /*
- * Created by Anselmo Jose Munoz Medina on 1/13/20 11:57 PM
+ * Created by Anselmo Jose Munoz Medina on 1/23/20 8:36 PM
  * Email: Joseanmun@gmail.com
  * Copyright (c) 2020. All rights reserved.
- * Last modified 1/13/20 11:57 PM
+ * Last modified 1/23/20 8:36 PM
  *
  */
 
-package com.example.mapapp
+package com.example.mapapp.presentation.map
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
@@ -16,10 +16,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
+import com.example.mapapp.R
 import com.example.mapapp.base.BaseActivity
 import com.example.mapapp.model.UserModel
-import com.example.mapapp.presentation.MapPresenter
-import com.example.mapapp.presentation.MapView
+import com.example.mapapp.presentation.detail.UserDetailActivity
+import com.example.mapapp.presentation.utils.CircleTransformation
 import com.github.marlonlom.utilities.timeago.TimeAgo
 import com.github.marlonlom.utilities.timeago.TimeAgoMessages
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -119,7 +120,8 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnInfoWindowC
 
     override fun renderCurrentUsersOnList(userList: List<UserModel>) {
         checkSelected = 0
-        var spinnerAdapter = CustomeSpinnerAdapter(this, userList)
+        var spinnerAdapter =
+            CustomeSpinnerAdapter(this, userList)
         spinner?.adapter = spinnerAdapter
         spinner!!.setAdapter(spinnerAdapter)
     }
@@ -178,7 +180,10 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnInfoWindowC
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
         if (++checkSelected > 1) {
             val intent =
-                UserDetailActivity.newIntent(this, p0!!.adapter.getItem(position) as UserModel)
+                UserDetailActivity.newIntent(
+                    this,
+                    p0!!.adapter.getItem(position) as UserModel
+                )
             startActivity(intent)
         }
     }
@@ -186,7 +191,10 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnInfoWindowC
     override fun onInfoWindowClick(marker: Marker?) {
         val userModel: UserModel? = presenter.getUserByName(marker!!.title)
         val intent =
-            UserDetailActivity.newIntent(this, userModel!!)
+            UserDetailActivity.newIntent(
+                this,
+                userModel!!
+            )
         startActivity(intent)
     }
 }

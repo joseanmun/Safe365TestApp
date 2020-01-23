@@ -1,12 +1,12 @@
 /*
- * Created by Anselmo Jose Munoz Medina on 1/23/20 3:36 PM
+ * Created by Anselmo Jose Munoz Medina on 1/23/20 8:35 PM
  * Email: Joseanmun@gmail.com
  * Copyright (c) 2020. All rights reserved.
- * Last modified 1/23/20 3:36 PM
+ * Last modified 1/23/20 8:35 PM
  *
  */
 
-package com.example.mapapp
+package com.example.mapapp.presentation.utils
 
 import android.graphics.*
 import com.squareup.picasso.Transformation
@@ -45,5 +45,6 @@ class CircleTransformation : Transformation {
         return output
     }
 
-    override fun key(): String = KEY
+    override fun key(): String =
+        KEY
 }

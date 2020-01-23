@@ -8,8 +8,8 @@
 
 package com.example.mapapp.injection.modules
 
-import com.example.mapapp.MapsActivity
-import com.example.mapapp.presentation.MapView
+import com.example.mapapp.presentation.map.MapView
+import com.example.mapapp.presentation.map.MapsActivity
 import dagger.Module
 import dagger.Provides
 

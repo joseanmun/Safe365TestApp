@@ -1,12 +1,12 @@
 /*
- * Created by Anselmo Jose Munoz Medina on 1/23/20 5:38 PM
+ * Created by Anselmo Jose Munoz Medina on 1/23/20 8:36 PM
  * Email: Joseanmun@gmail.com
  * Copyright (c) 2020. All rights reserved.
- * Last modified 1/23/20 5:38 PM
+ * Last modified 1/23/20 8:36 PM
  *
  */
 
-package com.example.mapapp
+package com.example.mapapp.presentation.map
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -15,7 +15,9 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.mapapp.R
 import com.example.mapapp.model.UserModel
+import com.example.mapapp.presentation.utils.CircleTransformation
 import com.github.marlonlom.utilities.timeago.TimeAgo
 import com.github.marlonlom.utilities.timeago.TimeAgoMessages
 import com.squareup.picasso.Picasso

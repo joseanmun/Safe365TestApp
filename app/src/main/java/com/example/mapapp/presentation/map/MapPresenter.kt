@@ -1,12 +1,12 @@
 /*
- * Created by Anselmo Jose Munoz Medina on 1/22/20 11:28 PM
+ * Created by Anselmo Jose Munoz Medina on 1/23/20 8:36 PM
  * Email: Joseanmun@gmail.com
  * Copyright (c) 2020. All rights reserved.
- * Last modified 12/13/18 5:28 PM
+ * Last modified 1/23/20 8:22 PM
  *
  */
 
-package com.example.mapapp.presentation
+package com.example.mapapp.presentation.map
 
 import com.example.domain.bean.UserBusinessObject
 import com.example.domain.interactor.GetUserListUseCase

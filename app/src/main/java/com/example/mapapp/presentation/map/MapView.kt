@@ -6,7 +6,7 @@
  *
  */
 
-package com.example.mapapp.presentation
+package com.example.mapapp.presentation.map
 
 import com.example.mapapp.model.UserModel
 

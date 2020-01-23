@@ -8,9 +8,9 @@
 
 package com.example.mapapp.injection
 
-import com.example.mapapp.MapsActivity
 import com.example.mapapp.injection.modules.MapActivityModule
 import com.example.mapapp.injection.scope.PerActivity
+import com.example.mapapp.presentation.map.MapsActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

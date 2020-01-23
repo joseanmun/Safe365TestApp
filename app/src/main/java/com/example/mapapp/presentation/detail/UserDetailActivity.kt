@@ -1,17 +1,18 @@
 /*
- * Created by Anselmo Jose Munoz Medina on 1/23/20 7:23 PM
+ * Created by Anselmo Jose Munoz Medina on 1/23/20 8:37 PM
  * Email: Joseanmun@gmail.com
  * Copyright (c) 2020. All rights reserved.
- * Last modified 1/23/20 7:23 PM
+ * Last modified 1/23/20 8:35 PM
  *
  */
 
-package com.example.mapapp
+package com.example.mapapp.presentation.detail
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mapapp.R
 import com.example.mapapp.model.UserModel
 import com.github.marlonlom.utilities.timeago.TimeAgo
 import com.github.marlonlom.utilities.timeago.TimeAgoMessages
