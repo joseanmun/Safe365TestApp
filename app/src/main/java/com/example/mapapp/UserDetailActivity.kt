@@ -26,6 +26,14 @@ class UserDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_detail)
 
+        //actionbar
+        val actionbar = supportActionBar
+        //set actionbar title
+        actionbar!!.title = getString(R.string.detail_title)
+        //set back button
+        actionbar.setDisplayHomeAsUpEnabled(true)
+        actionbar.setDisplayHomeAsUpEnabled(true)
+
         val user = intent.getParcelableExtra<UserModel>(INTENT_USER_ID)
         val messages = TimeAgoMessages.Builder().withLocale(Locale.ENGLISH).build()
 
@@ -40,6 +48,12 @@ class UserDetailActivity : AppCompatActivity() {
             .placeholder(R.drawable.ic_cloud_download_light_blue_a200_36dp)
             .error(R.drawable.ic_error_outline_red_200_36dp)
             .into(badge!!)
+
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     companion object {
