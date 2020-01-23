@@ -49,9 +49,10 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnInfoWindowC
     private var longitude: Double = 41.387154
     private var latitude: Double = 2.167180
     private var checkSelected: Int = 0
+    private var list: ArrayList<Target> = arrayListOf()
+
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
     private lateinit var mMap: GoogleMap
     private lateinit var messages: TimeAgoMessages
 
@@ -65,15 +66,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnInfoWindowC
         spinner!!.setOnItemSelectedListener(this)
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.setInfoWindowAdapter(CustomInfoWindowAdapter())
@@ -90,14 +82,11 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnInfoWindowC
         getCurrentLocation()
     }
 
-    var list: ArrayList<Target> = arrayListOf()
-
     override fun renderCurrentUsers(userList: List<UserModel>) {
         mMap.clear()
         hideLoader()
         list = arrayListOf()
         userList.forEach {
-            // Add a marker in Sydney and move the camera
             val poi = LatLng(it.latitude, it.longitude)
             var market = MarkerOptions()
                 .position(poi)
@@ -136,6 +125,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnInfoWindowC
     }
 
     override fun showError() {
+
     }
 
     @SuppressLint("MissingPermission")
@@ -152,9 +142,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnInfoWindowC
     }
 
     internal inner class CustomInfoWindowAdapter : GoogleMap.InfoWindowAdapter {
-
-        // These are both view groups containing an ImageView with id "badge" and two
-        // TextViews with id "title" and "snippet".
         private val contents: View = layoutInflater.inflate(R.layout.custom_info_contents, null)
 
         override fun getInfoWindow(marker: Marker): View? {
