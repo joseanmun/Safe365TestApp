@@ -39,7 +39,8 @@ import java.util.*
 import javax.inject.Inject
 
 
-class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView,
+class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener,
+    MapView,
     AdapterView.OnItemSelectedListener {
 
     @Inject
@@ -76,6 +77,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView,
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.setInfoWindowAdapter(CustomInfoWindowAdapter())
+        mMap.setOnInfoWindowClickListener(this)
 
     }
 
@@ -192,5 +194,12 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView,
                 UserDetailActivity.newIntent(this, p0!!.adapter.getItem(position) as UserModel)
             startActivity(intent)
         }
+    }
+
+    override fun onInfoWindowClick(marker: Marker?) {
+        val userModel: UserModel? = presenter.getUserByName(marker!!.title)
+        val intent =
+            UserDetailActivity.newIntent(this, userModel!!)
+        startActivity(intent)
     }
 }
