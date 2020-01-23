@@ -49,7 +49,7 @@ class CustomeSpinnerAdapter(val context: Context, var userList: List<UserModel>)
         vh.titleTextView.text = userModel.name
         vh.latTextView.text = userModel.latitude.toString()
         vh.lngTextView.text = userModel.longitude.toString()
-        vh.activeTextView.text = TimeAgo.using(userModel.timestamp.time, messages)
+        vh.activeTextView.text = TimeAgo.using(userModel.timestamp, messages)
         vh.motionTextView.text = userModel.motion
         Picasso.get()
             .load(userModel.avatar)
@@ -65,7 +65,7 @@ class CustomeSpinnerAdapter(val context: Context, var userList: List<UserModel>)
 
     override fun getItem(position: Int): Any? {
 
-        return null
+        return userList.get(index = position)
 
     }
 

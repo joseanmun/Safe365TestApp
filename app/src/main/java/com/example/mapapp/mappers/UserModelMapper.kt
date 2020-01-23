@@ -18,7 +18,7 @@ class UserModelMapper {
         userBusinessObject.avatar,
         userBusinessObject.latitude,
         userBusinessObject.longitude,
-        userBusinessObject.timestamp,
+        userBusinessObject.timestamp.time,
         userBusinessObject.motion
     )
 

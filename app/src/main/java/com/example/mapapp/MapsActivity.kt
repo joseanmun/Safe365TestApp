@@ -15,7 +15,6 @@ import android.location.Location
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ImageView
 import android.widget.TextView
 import com.example.mapapp.base.BaseActivity
 import com.example.mapapp.model.UserModel
@@ -48,6 +47,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView,
 
     private var longitude: Double = 41.387154
     private var latitude: Double = 2.167180
+    private var checkSelected: Int = 0
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -60,8 +60,8 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView,
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        messages = TimeAgoMessages.Builder().withLocale(Locale.ENGLISH).build()
         spinner!!.setOnItemSelectedListener(this)
-        messages = TimeAgoMessages.Builder().withLocale(Locale.ENGLISH).build();
     }
 
     /**
@@ -127,6 +127,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView,
     }
 
     override fun renderCurrentUsersOnList(userList: List<UserModel>) {
+        checkSelected = 0
         var spinnerAdapter = CustomeSpinnerAdapter(this, userList)
         spinner?.adapter = spinnerAdapter
         spinner!!.setAdapter(spinnerAdapter)
@@ -164,7 +165,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView,
         }
 
         private fun render(marker: Marker, view: View) {
-            val iconImageView = view.findViewById<ImageView>(R.id.badge)
             val titleTextView = view.findViewById<TextView>(R.id.name_tv)
             val latTextView = view.findViewById<TextView>(R.id.lat_tv)
             val lngTextView = view.findViewById<TextView>(R.id.lng_tv)
@@ -176,7 +176,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView,
             titleTextView.text = userModel?.name
             latTextView.text = userModel?.latitude.toString()
             lngTextView.text = userModel?.longitude.toString()
-            activeTextView.text = TimeAgo.using(userModel!!.timestamp!!.time, messages);
+            activeTextView.text = TimeAgo.using(userModel!!.timestamp!!, messages)
             motionTextView.text = userModel?.motion
 
 
@@ -186,6 +186,11 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView,
     override fun onNothingSelected(p0: AdapterView<*>?) {
     }
 
-    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+        if (++checkSelected > 1) {
+            val intent =
+                UserDetailActivity.newIntent(this, p0!!.adapter.getItem(position) as UserModel)
+            startActivity(intent)
+        }
     }
 }
