@@ -9,8 +9,13 @@
 package com.example.mapapp
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Bundle
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import com.example.mapapp.base.BaseActivity
 import com.example.mapapp.model.UserModel
 import com.example.mapapp.presentation.MapPresenter
@@ -21,8 +26,12 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import javax.inject.Inject
 
 
@@ -57,6 +66,8 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        mMap.setInfoWindowAdapter(CustomInfoWindowAdapter())
+
     }
 
     override var layout = R.layout.activity_maps;
@@ -68,16 +79,40 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView {
         getCurrentLocation()
     }
 
+    var list: ArrayList<Target> = arrayListOf()
+
     override fun renderCurrentUsers(userList: List<UserModel>) {
         hideLoader()
+        list = arrayListOf()
         userList.forEach {
             // Add a marker in Sydney and move the camera
             val poi = LatLng(it.latitude, it.longitude)
-            mMap.addMarker(
-                MarkerOptions()
-                    .position(poi)
-                    .title(it.name)
-            )
+            var market = MarkerOptions()
+                .position(poi)
+                .title(it.name)
+            var target = object : Target {
+                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                }
+
+                override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                }
+
+                override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                    mMap.addMarker(
+                        market.icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+                    )
+                }
+            }
+            Picasso.get()
+                .load(it.avatar)
+                .priority(Picasso.Priority.HIGH)
+                .placeholder(R.drawable.ic_cloud_download_light_blue_a200_36dp)
+                .error(R.drawable.ic_error_outline_red_200_36dp)
+                .resize(200, 200)
+                .centerCrop()
+                .transform(CircleTransformation())
+                .into(target)
+            list.add(target)
         }
     }
 
@@ -91,10 +126,46 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, MapView {
             .addOnSuccessListener { location: Location? ->
                 longitude = location?.longitude!!
                 latitude = location?.latitude
-                presenter.execute(latitude, longitude)
+                presenter.getUsersByLatLng(latitude, longitude)
                 val currentPosition = LatLng(latitude, longitude)
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(currentPosition))
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(17.0f))
             }
     }
+
+    internal inner class CustomInfoWindowAdapter : GoogleMap.InfoWindowAdapter {
+
+        // These are both view groups containing an ImageView with id "badge" and two
+        // TextViews with id "title" and "snippet".
+        private val contents: View = layoutInflater.inflate(R.layout.custom_info_contents, null)
+
+        override fun getInfoWindow(marker: Marker): View? {
+            return null
+        }
+
+        override fun getInfoContents(marker: Marker): View? {
+            render(marker, contents)
+            return contents
+        }
+
+        private fun render(marker: Marker, view: View) {
+            val iconImageView = view.findViewById<ImageView>(R.id.badge)
+            val titleTextView = view.findViewById<TextView>(R.id.name_tv)
+            val latTextView = view.findViewById<TextView>(R.id.lat_tv)
+            val lngTextView = view.findViewById<TextView>(R.id.lng_tv)
+            val activeTextView = view.findViewById<TextView>(R.id.timestamp_tv)
+            val motionTextView = view.findViewById<TextView>(R.id.motion_tv)
+
+            val userModel: UserModel? = presenter.getUserByName(marker.title)
+
+            titleTextView.text = userModel?.name
+            latTextView.text = userModel?.latitude.toString()
+            lngTextView.text = userModel?.longitude.toString()
+            activeTextView.text = userModel?.timestamp.toString()
+            motionTextView.text = userModel?.motion
+
+
+        }
+    }
+
 }
